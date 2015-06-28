@@ -13,8 +13,8 @@ $ node wikiproxy.js
 $ python -m SimpleHTTPServer 4321
 ```
 
-Then point the browser to the HTTP server's URL, like:
+Then point the browser to funfacts.html via the HTTP server, like:
 
-[http://localhost:4321](http://localhost:4321)
+[http://localhost:4321/funfacts.html](http://localhost:4321/funfacts.html)
 
 Good luck!
