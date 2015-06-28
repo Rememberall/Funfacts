@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf8"/>
+	<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+	<p id="fruit" style="color: green">
+		Bananas
+	</p>
+	<div id="idiot">
+		Derp
+	</div>
+	<ol id="rubbish">
+		<li>
+			Fish my lips
+		</li>
+		<li>
+			Hurtaderp
+		</li>
+	</ol>
+	<ul>
+		<li>
+			Klarpa
+		</li>
+		<li>
+			Blææææ
+		</li>
+	</ul>
+
+	<button onclick="change();">Change colour!</button>
+
+	<script>
+	var text = "hi ";
+	var number = 5;
+	console.log(text + number);
+
+	//Doesn't plus numbers because they're a String
+	console.log(text + number + number);
+	
+	//Plus numbers before String
+	console.log(number + number + text);
+	
+	//Again, String infront of numbers
+	console.log("" + number + number + text);
+
+	function change() {
+
+		var colorWhat = randomColour();
+
+		//Element
+		var bananas = document.querySelector("#fruit");
+		bananas.setAttribute("style", "color: " + colorWhat);
+	}
+
+	function randomColour() {
+		var randomColor = "#" + Math.round(Math.random() * 100) + Math.round(Math.random() * 100) + Math.round(Math.random() * 100);
+		console.log(randomColor);
+		return randomColor;
+	}
+	</script>
+</body>
+</html>

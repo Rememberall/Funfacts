@@ -1,0 +1,143 @@
+<html>
+<head>
+	<meta charset="utf8"/>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Funfact generator</h1>
+
+		<p id="funfact-body" style="font-size: 1.5em">(body)</p>
+		
+		<div class="checkbox">
+		    <label>
+			    <input checked id="checkbox-country" onclick="toggleCountry()" type="checkbox"> Country
+	    	</label>
+	    	<select id="select-country" class="form-control">
+				<option value="Norway">Norway</option>
+				<option value="United States">United States</option>
+			</select>
+		</div>
+
+		<div class="checkbox">
+		    <label>
+			    <input id="checkbox-person" type="checkbox"> Person
+	    	</label>
+		</div>
+
+		<div class="checkbox">
+		    <label>
+			    <input onclick="toggleField()" id="checkbox-country" type="checkbox"> Field
+	    	</label>
+		</div>
+
+		<div class="checkbox">
+		    <label>
+			    <input id="checkbox-animals" type="checkbox"> Animals
+	    	</label>
+		</div>
+
+		<button onclick="newFunfact();" class="btn btn-primary">Funfact!</button>
+	</div>
+
+	<hr/>
+	
+	<button id="button-new-random-person" onclick="newRandomPerson()" class="btn btn-primary">New person</button>
+	<div>
+		<span id="reference"></span>
+		<div id="infobox"></div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+
+	<script>
+		var funfacts = [
+			{
+				body: 'Jorden er rund',
+				country: 'Norway'
+			},
+			{
+				body: 'Katter er pattedyr',
+				country: 'Norway'
+			},
+			{
+				body: 'Neil Armstrong var den første mannen på månen',
+				country: 'United States'
+			}
+		];
+
+		var body = document.querySelector('#funfact-body');
+
+		// input stuff
+		var checkboxCountry = document.querySelector('#checkbox-country');
+		var selectCountry = document.querySelector('#select-country');
+
+
+		function newFunfact() {
+			var criteria = {};
+
+			// build criteria object
+			if (checkboxCountry.checked) {
+				var country = selectCountry.value;
+				criteria.country = country;
+			}
+
+			// filter the funfacts based on criteria
+			var eligibleFunfacts = funfacts.filter(function(funfact) {
+				for (var criterium in criteria) {
+					if (funfact[criterium] !== criteria[criterium]) {
+						return false;
+					}
+					return true;
+				}
+			});
+
+			// select a random eligible funfact and display it.
+			var funfactId = Math.floor(Math.random() * eligibleFunfacts.length);
+			body.innerHTML = eligibleFunfacts[funfactId].body;
+		}
+
+		function toggleCountry() {	
+			if (checkboxCountry.checked) {
+				selectCountry.setAttribute('style', 'display: block;');
+			} else {
+				selectCountry.setAttribute('style', 'display: none;');
+			}
+		}
+
+		newFunfact();
+
+		function newRandomPerson() {
+			var buttonNewRandomPerson = document.getElementById('button-new-random-person');
+			buttonNewRandomPerson.disabled = true;
+
+			var urls = [
+				'https://en.wikipedia.org/wiki/Leonardo_da_Vinci',
+				'https://en.wikipedia.org/wiki/Edvard_Munch',
+				'https://en.wikipedia.org/wiki/John_F._Kennedy',
+				'https://en.wikipedia.org/wiki/Sigrid_Undset',
+				'https://en.wikipedia.org/wiki/Ivar_Aasen',
+				'https://en.wikipedia.org/wiki/Nikola_Tesla',
+				'https://en.wikipedia.org/wiki/Thomas_Edison'
+			];
+
+			var url = urls[Math.floor(Math.random() * urls.length)];
+
+			$.ajax('http://localhost:1234?url=' + url)
+				.done(function(data) {
+					var table = data.substring(
+						data.indexOf('<table class="infobox'),
+						data.indexOf('</table>') + '</table>'.length
+					);
+
+					$('#infobox').html(table);
+					$('#reference').html('<a href="' + url + '">' + url + '</a>');
+					buttonNewRandomPerson.disabled = false;
+				});
+		}
+
+		newRandomPerson();
+		
+	</script>
+</body>
+</html>
